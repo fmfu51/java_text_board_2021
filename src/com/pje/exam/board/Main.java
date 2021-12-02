@@ -1,14 +1,15 @@
 package com.pje.exam.board;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /*
--  [ . ] /usr/article/detail 입력처리
--  [ . ] /usr/article/detail 입력되면 가장 최근 게시물 정보 노출
- */
+### TODO 예시
+- [.] /usr/article/detail 입력처리
+- [ ] /usr/article/detail 입력되면 가장 최근 게시물 정보 노출
+*/
 
 public class Main {
-
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 
@@ -17,6 +18,13 @@ public class Main {
 
     int articlesLastId = 0;
     Article lastArticle = null;
+    ArrayList<Article> articles = new ArrayList<Article>();
+
+    // 테스트 데이터 3개 등록, 시작
+    articles.add(new Article(1, "제목1", "내용1"));
+    articles.add(new Article(2, "제목2", "내용2"));
+    articles.add(new Article(3, "제목3", "내용3"));
+    // 테스트 데이터 3개 등록, 끝
 
     while (true) {
       System.out.printf("명령) ");
@@ -24,6 +32,16 @@ public class Main {
 
       if (cmd.equals("exit")) {
         break;
+      } else if (cmd.equals("/usr/article/list")) {
+        System.out.println("- 게시물 리스트 -");
+        System.out.println("--------------------");
+        System.out.println("번호 / 제목");
+        System.out.println("--------------------");
+
+        for (Article article : articles) {
+          System.out.printf("%d / %s\n", article.id, article.title);
+        }
+
       } else if (cmd.equals("/usr/article/detail")) {
 
         if (lastArticle == null) {
@@ -35,16 +53,14 @@ public class Main {
 
         System.out.println("- 게시물 상세내용 -");
         System.out.printf("번호 : %d\n", article.id);
-        System.out.printf("제목 : %d\n", article.title);
-        System.out.printf("내용 : %d\n", article.body);
-
+        System.out.printf("제목 : %s\n", article.title);
+        System.out.printf("내용 : %s\n", article.body);
       } else if (cmd.equals("/usr/article/write")) {
         System.out.println("- 게시물 등록 -");
         System.out.printf("제목 : ");
         String title = sc.nextLine();
         System.out.printf("내용 : ");
         String body = sc.nextLine();
-
         int id = articlesLastId + 1;
         articlesLastId = id;
 
@@ -52,24 +68,22 @@ public class Main {
         lastArticle = article;
         System.out.println("생성된 게시물 객체 : " + article);
 
-        System.out.printf("%d번 게시물이 입력되었습니다.\n", id);
-
+        System.out.printf("%d번 게시물이 입력되었습니다.\n", article.id);
       } else {
         System.out.printf("입력된 명령어 : %s\n", cmd);
       }
-
-      System.out.println("== 프로그램 종료 ==");
-      sc.close();
     }
+
+    System.out.println("== 프로그램 종료 ==");
+
+    sc.close();
   }
 }
-
 
 class Article {
   int id;
   String title;
   String body;
-
 
   Article(int id, String title, String body) {
     this.id = id;
@@ -79,8 +93,6 @@ class Article {
 
   @Override
   public String toString() {
-    return String.format("{id: %d, title: \"%s\"}", id, title);
-
+    return String.format("{id: %d, title: \"%s\", body: \"%s\"}", id, title, body);
   }
-
 }
